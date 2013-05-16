@@ -4,7 +4,7 @@ import org.javalite.activejdbc.Model;
 
 public class Building extends Model{
 	static{
-		validatePresenceOf("type","address_id","owner_id");
+		validatePresenceOf("type","address_id");
 	}
 }
 
