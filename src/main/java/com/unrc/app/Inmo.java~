@@ -1,7 +1,7 @@
 package com.unrc.app;
 
-import com.unrc.app.models.User;
-
+import com.unrc.app.models.Owner;
+import com.unrc.app.models.Address;
 import org.javalite.activejdbc.Base;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,14 +9,22 @@ import org.slf4j.LoggerFactory;
 public class Inmo {
     public static void main( String[] args )
     {
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/inmoapp_development", "root", "");
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/inmoapp_development", "root", "Pantera1.");
 
-        User e = new User();
+       	Owner e = new Owner();
         e.set("email", "user@email.com");
         e.set("first_name", "John");
         e.set("last_name", "Doe");
+		e.set("dni","123456");
         e.saveIt();
 
+		Address a = new Address();
+		e.add(a);
+		a.set("street","gral bustos");
+		a.set("num","1234");
+		a.set("neighborhood","azucarSintactica");
+		a.saveIt();
+	
         System.out.println( "Hello World!" );
-    }
+    }	
 }
