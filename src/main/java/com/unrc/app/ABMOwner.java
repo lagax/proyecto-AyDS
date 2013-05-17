@@ -53,7 +53,7 @@ public class ABMOwner {
 		}
 	}
 	
-	public static void modifyOwnerEmail(int dniOwner, String email)
+	public static void modifyEmail(int dniOwner, String email)
 	{
 		Owner o= Owner.findFirst("dni=?",dniOwner);
 		if (o!=null){
@@ -64,7 +64,7 @@ public class ABMOwner {
 		}
 	}
 
-	public static void modifyOwnerFirstName(int dniOwner, String firstName)
+	public static void modifyFirstName(int dniOwner, String firstName)
 	{
 		Owner o= Owner.findFirst("dni=?",dniOwner);
 		if (o!=null){
@@ -75,7 +75,7 @@ public class ABMOwner {
 		}
 	}
 
-	public static void modifyOwnerLastName(int dniOwner, String lastName)
+	public static void modifyLastName(int dniOwner, String lastName)
 	{
 		Owner o= Owner.findFirst("dni=?",dniOwner);
 		if (o!=null){
@@ -83,6 +83,17 @@ public class ABMOwner {
 		}
 		else{
 			System.out.println("Owner " + dniOwner + " doesn't exist");
+		}
+	}
+
+	public static void modifyDNI(int oldDni, int newDni)
+	{
+		Owner o= Owner.findFirst("dni=?",oldDNi);
+		if (o!=null){
+			o.set("dni",newDni).saveIt();
+		}
+		else{
+			System.out.println("Owner " + oldDni + " doesn't exist");
 		}
 	}
 
@@ -118,12 +129,8 @@ public class ABMOwner {
 			nc = new City();
 			nc.set("name",name,"postcode",postcode);
 			nc.saveIt();
-			nc.add(a);
-			a.saveIt();			
 		}
-		else{
-			nc.add(a);
-			a.saveIt();
-		}
+		nc.add(a);
+		a.saveIt();			
 	}
 }

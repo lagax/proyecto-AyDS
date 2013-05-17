@@ -64,7 +64,7 @@ public class ABMRealEstate {
 		}
 	}
 
-	public static void modifyRealEstateName(String oldName, String newName)
+	public static void modifyName(String oldName, String newName)
 	{
 		RealEstate r = RealEstate.findFirst("name=?",oldName);
 		if (r!=null){
@@ -76,7 +76,7 @@ public class ABMRealEstate {
 		}
 	}
 
-	public static void modifyRealEstateTel(String name, int newTel)
+	public static void modifyTel(String name, int newTel)
 	{
 		RealEstate r = RealEstate.findFirst("name=?",name);
 		if (r!=null){
@@ -88,7 +88,7 @@ public class ABMRealEstate {
 		}
 	}
 	
-	public static void modifyRealEstateEmail(String name, String email)
+	public static void modifyEmail(String name, String email)
 	{
 		RealEstate r = RealEstate.findFirst("name=?",name);
 		if (r!=null){
@@ -100,7 +100,7 @@ public class ABMRealEstate {
 		}
 	}
 
-	public static void modifyRealEstateWebsite(String name, String website)
+	public static void modifyRWebsite(String name, String website)
 	{
 		RealEstate r = RealEstate.findFirst("name=?",name);
 		if (r!=null){
@@ -129,31 +129,25 @@ public class ABMRealEstate {
 			nc = new City();
 			nc.set("name",name,"postcode",postcode);
 			nc.saveIt();
-			nc.add(a);
-			a.saveIt();			
 		}
-		else{
-			nc.add(a);
-			a.saveIt();
-		}
+		nc.add(a);
+		a.saveIt();			
 	}
 
-	public static void modifyAddress(String neighborhood, String oldaddress, String newaddress){
-		Address na = Address.findFirst("address = ?", newaddress);
-		if(na != null){
-			System.out.println("new address is already used");
+	public static void modifyAddress(String name, String neighborhood, String address){
+		{
+		Address a= Address.findFirst("address=?",address);
+		if (a!=null){
+			System.out.println("address "+address+" is already used");
 			return;
 		}
-		Address a = Address.findFirst("address = ?", oldaddress);
-		if(a!=null){
-			Building b = Building.findFirst("address_id = ?", a.get("id"));
-			if(b!=null){
-				a.set("neighborhood",neighborhood,"address",newaddress).saveIt();
-			}
+		RealEstate r = RealEstate.findFirst("name=?",name);
+		if (r==null){
+			System.out.println("real estate "+name+ " doesn't exist");
+			return;
 		}
-		else{
-			System.out.println("address does not exist");
-		}
+		a.set("neighborhood",neighborhood,"address",address).saveIt();
+	}
 	}
 
 	

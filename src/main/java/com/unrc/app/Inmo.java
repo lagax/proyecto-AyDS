@@ -19,10 +19,10 @@ public class Inmo {
 		ownerList.add(1313);
 		ownerList.add(3413);
 		ABMRealEstate.createRealEstate("inmo1","asss 332","sdaka","riocuarto",5800,4635465,"inmo1@gamil,com","www.inmo1.com",ownerList);
-		ABMRealEstate.modifyRealEstateEmail("inmo1","inmoooooo@masjs.com");
+		ABMRealEstate.modifyEmail("inmo1","inmoooooo@masjs.com");
 		ABMBuilding.deleteBuilding("blasbareba 12");
 		ABMOwner.deleteOwner(32492642);
-		//ABMOwner.modifyCity(32492642,"cordobaCapital",800000);	
+		ABMOwner.modifyCity("blasbareba 12","cordobaCapital",800000);	
 		
 		Base.close();	
         

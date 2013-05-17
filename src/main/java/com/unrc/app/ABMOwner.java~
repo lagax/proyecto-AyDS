@@ -53,7 +53,7 @@ public class ABMOwner {
 		}
 	}
 	
-	public static void modifyOwnerEmail(int dniOwner, String email)
+	public static void modifyEmail(int dniOwner, String email)
 	{
 		Owner o= Owner.findFirst("dni=?",dniOwner);
 		if (o!=null){
@@ -64,7 +64,7 @@ public class ABMOwner {
 		}
 	}
 
-	public static void modifyOwnerFirstName(int dniOwner, String firstName)
+	public static void modifyFirstName(int dniOwner, String firstName)
 	{
 		Owner o= Owner.findFirst("dni=?",dniOwner);
 		if (o!=null){
@@ -75,7 +75,7 @@ public class ABMOwner {
 		}
 	}
 
-	public static void modifyOwnerLastName(int dniOwner, String lastName)
+	public static void modifyLastName(int dniOwner, String lastName)
 	{
 		Owner o= Owner.findFirst("dni=?",dniOwner);
 		if (o!=null){
@@ -101,10 +101,10 @@ public class ABMOwner {
 		a.set("neighborhood",neighborhood,"address",address).saveIt();
 	}
 
-	public static void modifyCity(int dni,String name, int postcode){
-		Owner o = Owner.findFirst("dni = ?", dni);
-		if(o ==null){
-			System.out.println("dni does not exist");
+	public static void modifyCity(String address,String name, int postcode){
+		Address a = Address.findFirst("address = ?", address);
+		if(a ==null){
+			System.out.println("address does not exist");
 			return;
 		}
 		City oc = City.findFirst("id = ?", a.get("city_id"));//obtiene la ciudad de la direccion vieja
@@ -118,12 +118,8 @@ public class ABMOwner {
 			nc = new City();
 			nc.set("name",name,"postcode",postcode);
 			nc.saveIt();
-			nc.add(a);
-			a.saveIt();			
 		}
-		else{
-			nc.add(a);
-			a.saveIt();
-		}
+		nc.add(a);
+		a.saveIt();			
 	}
 }
