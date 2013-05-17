@@ -45,7 +45,7 @@ CREATE  TABLE `inmoapp_development`.`buildings` (
     price integer,
     status int,# for sale, for rent 
     address_id integer NOT NULL,
-	owner_id integer NOT NULL,
+	owner_id integer,
     constraint pkbuilding PRIMARY KEY (id),
     constraint chtypeRange check(type>=1 and type<=6),
     constraint chstatusRange check(status>=1 and status<=2)
@@ -55,5 +55,5 @@ DROP TABLE IF EXISTS `inmoapp_development`.`realEstates_owners`;
 CREATE  TABLE `inmoapp_development`.`realEstates_owners` (
     realEstate_id integer NOT NULL,
     owner_id integer NOT NULL,
-    constraint pkrealEstates_owners PRIMARY KEY (id_realEstate,id_owner)
+    constraint pkrealEstates_owners PRIMARY KEY (realEstate_id,owner_id)
 );

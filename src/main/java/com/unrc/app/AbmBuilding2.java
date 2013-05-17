@@ -10,7 +10,7 @@ import org.javalite.activejdbc.Base;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AbmBuilding {
+public class AbmBuilding2 {
 	
 	public static void createBuilding(int type,String description,int status, int price, String address,String neighborhood ,String city,int postcode,int dni){
 		if(type>=1 && type<=6 && status<=2 && status>=1){//chequea si status y type estan en el rango correcto
@@ -19,24 +19,31 @@ public class AbmBuilding {
 				System.out.println("Owner does not exist");
 				return;
 			}
-			Address a = Address.findFirst("address = ?", address);//chequea si la direccion ya existe
-			if(a == null){//si no existe, crea la direccion y el inmueble a guardar
+			Address la = Address.findFirst("address = ?", address);//chequea si la direccion ya existe
+			if(la == null){//si no existe, crea la direccion y el inmuble a guardar
 				Building b = new Building();
 				b.set("type",type,"description",description,"status",status,"price",price);
-				a = new Address();
+				Address a = new Address();
 				a.set("address",address,"neighborhood",neighborhood);
 				
-				City c = City.findFirst("postcode = ?",postcode);//chequea si la ciudad ya existe
-				if(c == null){ //si no existe, la crea
-					c = new City();
+				City lc = City.findFirst("postcode = ?",postcode);//chequea si la ciudad ya existe
+				if(lc == null){ //si no existe, la crea
+					City c = new City();
 					c.set("name",city,"postcode",postcode);
 					c.saveIt();
+					c.add(a);
+					a.saveIt();
+					a.add(b);
+					o.add(b);
+					b.saveIt();
 				}
-				c.add(a);
-				a.saveIt();
-				a.add(b);
-				o.add(b);
-				b.saveIt();	
+				else{
+					lc.add(a);
+					a.saveIt();
+					a.add(b);
+					o.add(b);
+					b.saveIt();
+				}	
 			}
 			else{
 				System.out.println("address already exists");

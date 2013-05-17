@@ -56,7 +56,7 @@ public class ABMRealEstate {
 	{
 		RealEstate r = RealEstate.findFirst("name=?",nameRE);
 		if (r!=null){
-			RealEstatesOwners.delete("realEstate_id=?",r.get("id"));
+			RealEstateOwner.delete("realEstate_id=?",r.get("id"));
 			RealEstate.delete("id=?",r.get("id"));
 		}
 		else{
