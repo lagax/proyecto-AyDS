@@ -46,14 +46,22 @@ public class ABMOwner {
 		Owner o= Owner.findFirst("dni=?",dniOwner);
 		if (o!=null){
 			RealEstatesOwners.delete("owner_id=?",o.get("id"));
+			List<Building> lb = new LinkedList<Building>();
+			lb = Building.where("owner_id = ?", o.get("id"));
+			for(int i=0;i<lb.size();i++){ //elimina todos los inmuebles del dueño
+				Building b = lb.get(i);
+				Address a = Address.findFirst("id = ?",b.get("address_id"));
+				ABMBuilding.deleteBuilding((String)a.get("address"));
+			}
 			Owner.delete("id=?",o.get("id"));
+			
 		}
 		else{
 			System.out.println("Owner " + dniOwner + " doesn't exist");
 		}
 	}
 	
-	public static void modifyEmail(int dniOwner, String email)
+	public static void modifyOwnerEmail(int dniOwner, String email)
 	{
 		Owner o= Owner.findFirst("dni=?",dniOwner);
 		if (o!=null){
@@ -64,7 +72,7 @@ public class ABMOwner {
 		}
 	}
 
-	public static void modifyFirstName(int dniOwner, String firstName)
+	public static void modifyOwnerFirstName(int dniOwner, String firstName)
 	{
 		Owner o= Owner.findFirst("dni=?",dniOwner);
 		if (o!=null){
@@ -75,7 +83,7 @@ public class ABMOwner {
 		}
 	}
 
-	public static void modifyLastName(int dniOwner, String lastName)
+	public static void modifyOwnerLastName(int dniOwner, String lastName)
 	{
 		Owner o= Owner.findFirst("dni=?",dniOwner);
 		if (o!=null){
@@ -86,51 +94,45 @@ public class ABMOwner {
 		}
 	}
 
-	public static void modifyDNI(int oldDni, int newDni)
-	{
-		Owner o= Owner.findFirst("dni=?",oldDNi);
-		if (o!=null){
-			o.set("dni",newDni).saveIt();
+	public static void modifyAddress(int dni, String neighborhood, String newaddress){
+		Owner o = Owner.findFirst("dni = ?", dni);
+		if(o == null){
+			System.out.println("Owner " + dni + " doesn't exist");
+			return;
 		}
-		else{
-			System.out.println("Owner " + oldDni + " doesn't exist");
+		Address na = Address.findFirst("address = ?", newaddress);
+		if(na != null){
+			System.out.println("new address is already used");
+			return;
 		}
+		Address a = Address.findFirst("id = ?", o.get("address_id"));
+		a.set("neighborhood",neighborhood,"address",newaddress).saveIt();;
 	}
 
-	public static void modifyAddress(int dniOwner,String address, String neighborhood, String city)
-	{
-		Address a= Address.findFirst("address=?",address);
-		if (a!=null){
-			System.out.println("address "+address+" is already used");
+	public static void modifyCity(int dni,String name, int postcode){
+		Owner o = Owner.findFirst("dni = ?", dni);
+		if(o == null){
+			System.out.println("Owner " + dni + " doesn't exist");
 			return;
 		}
-		Owner o = Owner.findFirst("dni=?",dniOwner);
-		if (o==null){
-			System.out.println("owner "+dniOwner+ " doesn't exist");
-			return;
-		}
-		a.set("neighborhood",neighborhood,"address",address).saveIt();
-	}
-
-	public static void modifyCity(String address,String name, int postcode){
-		Address a = Address.findFirst("address = ?", address);
-		if(a ==null){
-			System.out.println("address does not exist");
-			return;
-		}
-		City oc = City.findFirst("id = ?", a.get("city_id"));//obtiene la ciudad de la direccion vieja
+		Address a = Address.findFirst("id = ?", o.get("address_id"));
+		City oc = City.findFirst("id = ?", a.get("city_id"));//obtiene la ciudad de la direccion
 		List<Address> la = new LinkedList<Address>();
 		la = Address.where("city_id = ?", oc.get("id"));
-		if(la.size()==1){
-			oc.delete();
+		if(la.size()==1){ //si la ciudad no pertenece a ninga otra direccion, la elimina
+			oc.delete(); 
 		}
 		City nc = City.findFirst("postcode = ?",postcode);//chequea si la ciudad ya existe
 		if(nc == null){
 			nc = new City();
 			nc.set("name",name,"postcode",postcode);
 			nc.saveIt();
+			nc.add(a);
+			a.saveIt();			
 		}
-		nc.add(a);
-		a.saveIt();			
+		else{
+			nc.add(a);
+			a.saveIt();
+		}
 	}
 }
