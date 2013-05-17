@@ -53,7 +53,8 @@ CREATE  TABLE `inmoapp_development`.`buildings` (
 
 DROP TABLE IF EXISTS `inmoapp_development`.`realEstates_owners`;
 CREATE  TABLE `inmoapp_development`.`realEstates_owners` (
+	id integer NOT NULL auto_increment,
     realEstate_id integer NOT NULL,
     owner_id integer NOT NULL,
-    constraint pkrealEstates_owners PRIMARY KEY (realEstate_id,owner_id)
+    constraint pkrealEstates_owners PRIMARY KEY (id)
 );

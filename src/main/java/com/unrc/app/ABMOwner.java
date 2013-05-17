@@ -57,7 +57,29 @@ public class ABMOwner {
 	{
 		Owner o= Owner.findFirst("dni=?",dniOwner);
 		if (o!=null){
-			Owner.update("email=?","email like ?",email,o.get("email"));
+			o.set("email",email).saveIt();
+		}
+		else{
+			System.out.println("Owner " + dniOwner + " doesn't exist");
+		}
+	}
+
+	public static void modifyOwnerFirstName(int dniOwner, String firstName)
+	{
+		Owner o= Owner.findFirst("dni=?",dniOwner);
+		if (o!=null){
+			o.set("first_name",firstName).saveIt();
+		}
+		else{
+			System.out.println("Owner " + dniOwner + " doesn't exist");
+		}
+	}
+
+	public static void modifyOwnerLastName(int dniOwner, String lastName)
+	{
+		Owner o= Owner.findFirst("dni=?",dniOwner);
+		if (o!=null){
+			o.set("last_name",lastName).saveIt();
 		}
 		else{
 			System.out.println("Owner " + dniOwner + " doesn't exist");

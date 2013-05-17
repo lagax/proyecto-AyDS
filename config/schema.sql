@@ -15,8 +15,8 @@ CREATE  TABLE `inmoapp_development`.`addresses` (
     constraint pkaddress PRIMARY KEY (id)
 );
 
-DROP TABLE IF EXISTS `inmoapp_development`.`realEstates`;
-CREATE  TABLE `inmoapp_development`.`realEstates` (
+DROP TABLE IF EXISTS `inmoapp_development`.`real_estates`;
+CREATE  TABLE `inmoapp_development`.`real_estates` (
     id integer NOT NULL auto_increment,
     name varchar(50),
     email varchar(50),
@@ -51,9 +51,10 @@ CREATE  TABLE `inmoapp_development`.`buildings` (
     constraint chstatusRange check(status>=1 and status<=2)
 );
 
-DROP TABLE IF EXISTS `inmoapp_development`.`realEstates_owners`;
-CREATE  TABLE `inmoapp_development`.`realEstates_owners` (
-    realEstate_id integer NOT NULL,
+DROP TABLE IF EXISTS `inmoapp_development`.`real_estates_owners`;
+CREATE  TABLE `inmoapp_development`.`real_estates_owners` (
+	id integer NOT NULL auto_increment,
+    real_estate_id integer NOT NULL,
     owner_id integer NOT NULL,
-    constraint pkrealEstates_owners PRIMARY KEY (realEstate_id,owner_id)
+    constraint pkrealEstates_owners PRIMARY KEY (id)
 );

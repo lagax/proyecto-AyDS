@@ -35,7 +35,7 @@ public class ABMRealEstate {
 				a.add(r);
 			}
 				
-			while (owners.get(0)!=null){ //chequeamos cada dueño, si no existe no lo agregamos a la relacion
+			while (!owners.isEmpty()){ //chequeamos cada dueño, si no existe no lo agregamos a la relacion
 				int dniOwner = owners.remove(0);
 				Owner o=Owner.findFirst("dni=?",dniOwner);
 				if (o!=null){
@@ -52,11 +52,11 @@ public class ABMRealEstate {
 		}
     }
 
-	public static void removeRealEstate(String nameRE)
+	public static void deleteRealEstate(String nameRE)
 	{
 		RealEstate r = RealEstate.findFirst("name=?",nameRE);
 		if (r!=null){
-			RealEstatesOwners.delete("realEstate_id=?",r.get("id"));
+			RealEstatesOwners.delete("real_estate_id=?",r.get("id"));
 			RealEstate.delete("id=?",r.get("id"));
 		}
 		else{
@@ -64,24 +64,97 @@ public class ABMRealEstate {
 		}
 	}
 
-	public static void updateRealEstateName(RealEstate r, String name)
+	public static void modifyRealEstateName(String oldName, String newName)
 	{
-		RealEstate.update("name=?","name like ?",name,r.get("name"));
+		RealEstate r = RealEstate.findFirst("name=?",oldName);
+		if (r!=null){
+			r.set("name",newName);
+			r.saveIt();
+		}
+		else{
+			System.out.println(" Real Estate "+oldName+" doesn't exist");
+		}
 	}
 
-	public static void updateRealEstateTel(RealEstate r, Integer tel)
+	public static void modifyRealEstateTel(String name, int newTel)
 	{
-		RealEstate.update("phone_number=?","phone_number like ?",tel,r.get("phone_number"));
+		RealEstate r = RealEstate.findFirst("name=?",name);
+		if (r!=null){
+			r.set("phone_number",newTel);
+			r.saveIt();
+		}
+		else{
+			System.out.println(" Real Estate "+name+" doesn't exist");
+		}
 	}
 	
-	public static void updateRealEstateEmail(RealEstate r, String email)
+	public static void modifyRealEstateEmail(String name, String email)
 	{
-		RealEstate.update("email=?","email like ?",email,r.get("email"));
+		RealEstate r = RealEstate.findFirst("name=?",name);
+		if (r!=null){
+			r.set("email",email);
+			r.saveIt();
+		}
+		else{
+			System.out.println(" Real Estate "+name+" doesn't exist");
+		}
 	}
 
-	public static void updateRealEstateWebsite(RealEstate r, String website)
+	public static void modifyRealEstateWebsite(String name, String website)
 	{
-		RealEstate.update("web_site=?","web_site like ?",website,r.get("web_site"));
+		RealEstate r = RealEstate.findFirst("name=?",name);
+		if (r!=null){
+			r.set("web_site",website);
+			r.saveIt();
+		}
+		else{
+			System.out.println(" Real Estate "+name+" doesn't exist");
+		}
 	}
+
+	public static void modifyCity(String address,String name, int postcode){
+		Address a = Address.findFirst("address = ?", address);
+		if(a ==null){
+			System.out.println("address does not exist");
+			return;
+		}
+		City oc = City.findFirst("id = ?", a.get("city_id"));//obtiene la ciudad de la direccion vieja
+		List<Address> la = new LinkedList<Address>();
+		la = Address.where("city_id = ?", oc.get("id"));
+		if(la.size()==1){
+			oc.delete();
+		}
+		City nc = City.findFirst("postcode = ?",postcode);//chequea si la ciudad ya existe
+		if(nc == null){
+			nc = new City();
+			nc.set("name",name,"postcode",postcode);
+			nc.saveIt();
+			nc.add(a);
+			a.saveIt();			
+		}
+		else{
+			nc.add(a);
+			a.saveIt();
+		}
+	}
+
+	public static void modifyAddress(String neighborhood, String oldaddress, String newaddress){
+		Address na = Address.findFirst("address = ?", newaddress);
+		if(na != null){
+			System.out.println("new address is already used");
+			return;
+		}
+		Address a = Address.findFirst("address = ?", oldaddress);
+		if(a!=null){
+			Building b = Building.findFirst("address_id = ?", a.get("id"));
+			if(b!=null){
+				a.set("neighborhood",neighborhood,"address",newaddress).saveIt();
+			}
+		}
+		else{
+			System.out.println("address does not exist");
+		}
+	}
+
 	
 }

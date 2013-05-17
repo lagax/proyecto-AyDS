@@ -4,6 +4,5 @@ import org.javalite.activejdbc.Model;
 
 public class RealEstatesOwners extends Model {
   static{
-      validatePresenceOf("owner_id","realEstate_id");
   }
 }
