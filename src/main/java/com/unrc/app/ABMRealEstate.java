@@ -100,7 +100,7 @@ public class ABMRealEstate {
 		}
 	}
 
-	public static void modifyRWebsite(String name, String website)
+	public static void modifyWebsite(String name, String website)
 	{
 		RealEstate r = RealEstate.findFirst("name=?",name);
 		if (r!=null){
@@ -112,16 +112,17 @@ public class ABMRealEstate {
 		}
 	}
 
-	public static void modifyCity(String address,String name, int postcode){
-		Address a = Address.findFirst("address = ?", address);
-		if(a ==null){
-			System.out.println("address does not exist");
+	public static void modifyCity(String nameRE,String name, int postcode){
+		RealEstate r = RealEstate.findFirst("name = ?", nameRE);
+		if(r ==null){
+			System.out.println("Real estate does not exist");
 			return;
 		}
+		Address a = Address.findFirst("id=?",r.get("address_id"));
 		City oc = City.findFirst("id = ?", a.get("city_id"));//obtiene la ciudad de la direccion vieja
 		List<Address> la = new LinkedList<Address>();
 		la = Address.where("city_id = ?", oc.get("id"));
-		if(la.size()==1){
+		if(la.size()==1){//si la ciudad no pertenece a ninga otra direccion, la elimina
 			oc.delete();
 		}
 		City nc = City.findFirst("postcode = ?",postcode);//chequea si la ciudad ya existe

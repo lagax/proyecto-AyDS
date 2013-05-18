@@ -11,7 +11,7 @@ public class ABMOwner {
 
     public static void createOwner(int dni, String firstName,String lastName, String address, String neighborhood, String city,int postcode, String email)
     {
-		Owner p = Owner.findFirst("dni=?",dni);
+		Owner p = Owner.findFirst("dni=?",dni); 
 		if (p==null){ //si no existe este dueño lo creamos 
        	 	p = new Owner();
 			p.set("dni",dni);	
@@ -61,7 +61,7 @@ public class ABMOwner {
 		}
 	}
 	
-	public static void modifyOwnerEmail(int dniOwner, String email)
+	public static void modifyEmail(int dniOwner, String email)
 	{
 		Owner o= Owner.findFirst("dni=?",dniOwner);
 		if (o!=null){
@@ -72,7 +72,7 @@ public class ABMOwner {
 		}
 	}
 
-	public static void modifyOwnerFirstName(int dniOwner, String firstName)
+	public static void modifyFirstName(int dniOwner, String firstName)
 	{
 		Owner o= Owner.findFirst("dni=?",dniOwner);
 		if (o!=null){
@@ -83,11 +83,22 @@ public class ABMOwner {
 		}
 	}
 
-	public static void modifyOwnerLastName(int dniOwner, String lastName)
+	public static void modifyLastName(int dniOwner, String lastName)
 	{
 		Owner o= Owner.findFirst("dni=?",dniOwner);
 		if (o!=null){
 			o.set("last_name",lastName).saveIt();
+		}
+		else{
+			System.out.println("Owner " + dniOwner + " doesn't exist");
+		}
+	}
+
+	public static void modifyDni(int dniOwner, int newDni)
+	{
+		Owner o= Owner.findFirst("dni=?",dniOwner);
+		if (o!=null){
+			o.set("dni",newDni).saveIt();
 		}
 		else{
 			System.out.println("Owner " + dniOwner + " doesn't exist");
@@ -126,13 +137,9 @@ public class ABMOwner {
 		if(nc == null){
 			nc = new City();
 			nc.set("name",name,"postcode",postcode);
-			nc.saveIt();
-			nc.add(a);
-			a.saveIt();			
+			nc.saveIt();		
 		}
-		else{
-			nc.add(a);
-			a.saveIt();
-		}
+		nc.add(a);
+		a.saveIt();
 	}
 }

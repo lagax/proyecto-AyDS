@@ -22,7 +22,8 @@ public class Inmo {
 		ABMRealEstate.modifyEmail("inmo1","inmoooooo@masjs.com");
 		ABMBuilding.deleteBuilding("blasbareba 12");
 		ABMOwner.deleteOwner(32492642);
-		ABMOwner.modifyCity(32492642,"cordobaCapital",800000);	
+		ABMOwner.modifyCity(1313,"cordobaCapital",800000);
+		ABMRealEstate.modifyCity("inmo1","BUENOSAIRES",2388);	
 		
 		Base.close();	
         
