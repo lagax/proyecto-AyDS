@@ -13,7 +13,7 @@ public class OwnerSpec{
 
     @Before
     public void before(){
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/inmoapp_development", "root", "Pantera1.");
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/inmoapp_development", "root", "root");
         Base.openTransaction();
     }
 
@@ -41,24 +41,7 @@ public class OwnerSpec{
         the(owner).shouldBe("valid");
     }
 
-	/*@Test
-	public void shouldValidateEmailFormat(){
-
-		Owner owner = new Owner();
-		owner.set("dni", 1,"first_name", "John", "last_name", "Doe");
-
-		//check errors
-		owner.set("email","mail");
-		the(owner).shouldNotBe("valid");
-
-		//set correct values
-		owner.set("email","mail@vlestre.com");
-
-		//all is good
-		the(owner).shouldBe("valid");
-		
-	}*/
-
+	
 	@Test
 	public void shouldValidateNumericalityOfDni(){
 

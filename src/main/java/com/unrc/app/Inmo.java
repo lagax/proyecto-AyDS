@@ -12,7 +12,7 @@ import java.util.*;
 public class Inmo {
     public static void main( String[] args )
     {
-		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/inmoapp_development", "root", "Pantera1.");
+		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/inmoapp_development", "root", "root");
 
 		//ABMOwner.createOwner(32492642,"john","doe","ksadad 222","asnmsal", "riocuarto",5800, "jnskks@ndn.com");
 		//ABMOwner.createOwner(90,"brad","paaras","ssddd 662","asnmsal", "riocuarto",5800, "jnsgte@ndn.com");
