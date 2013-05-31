@@ -190,12 +190,8 @@ public class ABMBuilding {
 			nc = new City();
 			nc.set("name",name,"postcode",postcode);
 			nc.saveIt();
-			nc.add(a);
-			a.saveIt();			
 		}
-		else{
-			nc.add(a);
-			a.saveIt();
-		}
+		nc.add(a);
+		a.saveIt();			
 	}
 }

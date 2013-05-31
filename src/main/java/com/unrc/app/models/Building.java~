@@ -4,7 +4,17 @@ import org.javalite.activejdbc.Model;
 
 public class Building extends Model{
 	static{
-		validatePresenceOf("type","address_id","owner_id");
+		validatePresenceOf("type","address_id","status");
+		validateRange("type", 1, 6);
+		validateRange("status", 1, 2);
+	}
+
+		public String toString(){
+		String res1 = "descripcion: " +  this.get("description");
+		Address a = Address.findFirst("id=?","address_id");
+		String res2 = "direccion: " +  a.get("address");
+		String res3 = "estado: " +  this.get("status").toString();	
+		return res1+res2+res3;
 	}
 }
 

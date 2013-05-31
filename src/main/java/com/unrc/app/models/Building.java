@@ -8,5 +8,9 @@ public class Building extends Model{
 		validateRange("type", 1, 6);
 		validateRange("status", 1, 2);
 	}
+
+		public String toString(){	
+		return "descripcion: " + this.get("description");
+	}
 }
 
