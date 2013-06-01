@@ -14,7 +14,15 @@ import java.util.*;
 
 public class Inmo {
 
-
+	private static Integer valor(String param, Set<String> s,Request request){
+		if(s.contains(param)){
+			return Integer.parseInt(request.queryParams(param));
+		}
+		else{
+			return null;
+		}
+	}	
+	
     public static void main( String[] args )
     {
 		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/inmoapp_development", "root", "root");
@@ -25,38 +33,47 @@ public class Inmo {
      	ABMBuilding.createBuilding(2,"vlestre",2,100000,"blasbareba 128","poltrof","irak",5800,90);
 		Base.close();
 
-		get(new Route("/hello") {
+		get(new Route("/hello") {// muestra el menu
          @Override
         
-         public Object handle(Request request, Response response) {
+         public Object handle(Request request, Response response) { 
 			Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/inmoapp_development", "root", "root");
             String title = "<h1> Inmobiliaria </h1>";
 
 			String menu = "<ul> <li> <a href=\"/buildings\"> Inmuebles </a> </li> </ul>";
-			String menu2 = "<ul> <li> <a href=\"/owners\"> Dueños </a> </li> </ul>";
-			String menu3 = "<ul> <li> <a href=\"/realEstates\"> Inmobiliarias </a> </li> </ul>";
 
             String footer = "<p> created by: lagax</p>";
 			Base.close();
-            return title + menu + menu2 + menu3 + footer;
+            return title + menu + footer;
          };
 		 });
 
-		get(new Route("/buildings") { //muestra todos los edificios
+		get(new Route("/buildings") { //motor de busqueda
 	         @Override
 	         public Object handle(Request request, Response response) {
 	        	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/inmoapp_development", "root", "root");
-	        	List<Building> inmuebles=Building.findAll();
+				Set<String> parametros = request.queryParams();
+				Integer type = valor("type",parametros,request); 				
+				Integer status = valor("status",parametros,request);
+				Integer minPrice = valor("minPrice",parametros,request);
+				Integer maxPrice = valor("maxPrice",parametros,request);
+				String city = request.queryParams("city");
+				Integer dni = valor("dni",parametros,request);
+				String realEstate = request.queryParams("realEstate");
+	        	List<Building> inmuebles = Search.buildings(type,status,minPrice,maxPrice,city,dni,realEstate);
 	        	String pantalla="";
 	        	Iterator<Building> iter=inmuebles.iterator();
 	        	while(iter.hasNext()){
-	        	 Building o=iter.next();
-	        	 pantalla=pantalla+o.toString()+("\n");
+	        	 Building b = iter.next();
+	        	 pantalla = pantalla + b.toString()+("\n");
 	        	}
 	        	Base.close();
 	        	return  pantalla;
 	         }
 	      });
+
+		
+
 
 		
          

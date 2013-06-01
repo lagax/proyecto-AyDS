@@ -9,12 +9,11 @@ public class Building extends Model{
 		validateRange("status", 1, 2);
 	}
 
-		public String toString(){
-		String res1 = "descripcion: " +  this.get("description");
-		Address a = Address.findFirst("id=?","address_id");
-		String res2 = "direccion: " +  a.get("address");
-		String res3 = "estado: " +  this.get("status").toString();	
-		return res1+res2+res3;
+	public String toString(){	
+		Address a = Address.findFirst("id= ?", this.get("address_id"));
+		City c = City.findFirst("id = ?", a.get("city_id") );
+		return " descripcion: " + this.get("description") + ", type: "+ this.get("type")+ ", status: " +this.get("status") 
+				+ ", address: "+ a.get("address") + ", city: " + c.get("name") ;
 	}
 }
 
