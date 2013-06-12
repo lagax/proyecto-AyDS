@@ -39,6 +39,12 @@
       <version>0.9.9.7-SNAPSHOT</version>
 	</dependency>
 
+	<dependency>
+ 		<groupId>org.freemarker</groupId>
+ 		<artifactId>freemarker</artifactId>
+ 		<version>2.3.19</version>
+	</dependency>
+
   </dependencies>
 
   <build>
@@ -76,7 +82,8 @@
      </plugin>
    </plugins>
  </build>
-<repositories>
+<repositories>	
+
 	<repository>
     	  <id>Spark repository</id>
    	   <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
