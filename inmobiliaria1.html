@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title></title>
+	</head>
+	<body>
+		<body BGCOLOR=#CCCC99>
+		<form action = "Createbuildings" method = "post">
+		<h1><div style="text-align: center;"> Cargar un inmueble<br>
+ 		</h1>
+		<h2>
+		<div style="text-align: center;">Ingrese los datos <br>
+		</h2>
+ 		<br><div style="text-align: center;">Tipo del inmueble
+			<select name="type">
+				<option value="1">campo</option>
+				<option value="2">quinta</option>
+				<option value="3">casa</option>
+				<option value="4">garage</option>
+				<option value="5">oficina</option>
+				<option value="6">departamento</option>
+			</select> 	
+		<br> 
+	<br><div style="text-align: center;">Categoria
+			<select name="status">
+				<option value="1">En venta</option>
+				<option value="2">En alquiler</option>
+			</select> 	
+		<br> 
+		<br>
+		<div style="text-align: center;">Precio <input name="price"><br>
+		<br>
+		<div style="text-align: center;">Ciudad <input name="city"><br>
+		<br><div style="text-align: center;">Codigo postal <input name="postcode"><br>
+		<br><div style="text-align: center;">Barrio <input name="neighborhood"><br>
+		<br><div style="text-align: center;">Direccion <input name="address"><br>
+		<br><div style="text-align: center;">Dni del propietario <input name="dni"><br>
+		<br><div style="text-align: center;">Descripcion<br>
+			<textarea cols="40" rows="5" name="description"></textarea><br>
+
+		<input type = "submit", value = "Guardar"/>
+		<input name="reset" value="Limpiar Formulario" type="reset">
+
+		</form>
+	</body>
+</html>
