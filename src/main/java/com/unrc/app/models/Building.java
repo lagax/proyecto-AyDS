@@ -12,7 +12,7 @@ public class Building extends Model{
 	public String toString(){	
 		Address a = Address.findFirst("id= ?", this.get("address_id"));
 		City c = City.findFirst("id = ?", a.get("city_id") );
-		return " descripcion: " + this.get("description") + ", type: "+ this.get("type")+ ", status: " +this.get("status") 
+		return " descripcion: " + this.get("description") +", price: "+this.get("price")+ ", type: "+ this.get("type")+ ", status: " +this.get("status") 
 				+ ", address: "+ a.get("address") + ", city: " + c.get("name") ;
 	}
 }

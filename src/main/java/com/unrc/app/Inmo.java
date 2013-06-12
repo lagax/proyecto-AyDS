@@ -7,48 +7,213 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static spark.Spark.*;
 import spark.*;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.Map;
+import com.unrc.app.models.Owner;
 
+
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+
+import freemarker.template.Configuration;
 import com.unrc.app.models.Building;
 
 import java.util.*;
 
 public class Inmo {
-
+	
+	/*funcion para pasar los paramtros no nulos a Integer*/
 	private static Integer valor(String param, Set<String> s,Request request){
-		if(s.contains(param)){
+		if(s.contains(param) && request.queryParams(param)!=""){
 			return Integer.parseInt(request.queryParams(param));
 		}
 		else{
 			return null;
 		}
-	}	
+	}
 	
-    public static void main( String[] args )
-    {
+
+	public static void main( String[] args ){
+		
+		
 		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/inmoapp_development", "root", "root");
-		ABMOwner.createOwner(32492642,"john","doe","ksadad 222","asnmsal", "riocuarto",5800, "jnskks@ndn.com");
-		ABMOwner.createOwner(90,"brad","paaras","ssddd 662","asnmsal", "riocuarto",5800, "jnsgte@ndn.com");
-     	ABMBuilding.createBuilding(2,"vlestre",1,4000,"blasbareba 123","poltrof","riocuarto",5800,90);
-     	ABMBuilding.createBuilding(2,"vlestre",2,3000,"blasbareba 124","poltrof","irak",5800,90);
-     	ABMBuilding.createBuilding(2,"vlestre",2,100000,"blasbareba 128","poltrof","irak",5800,90);
+		/*creamos algunos dueños y realEstate como ejemplo*/
+		ABMOwner.createOwner(37453263,"Juan","Doe","San Martin 12","centro", "Rio Cuarto",5800, "vlastra@hotmail.com");
+		ABMOwner.createOwner(32678354,"Pablo","Palpoller","Ocean Drive 677", "Miami Beach", "Miami",4400,"pablo@gmail.com");
+		ABMOwner.createOwner(25897653,"Raul","Sangarengue","Ranksgargen 233","Trensrten","Berlin",8900,"rasanga@gmail.com");
+		List<Integer> owners = new LinkedList<Integer>();
+		owners.add(37453263);
+		ABMRealEstate.createRealEstate("Inmo", "koala 123","Canguro","Sidney",7600,15890076,"Inmo@gmail.com","www.inmo.com",owners);
 		Base.close();
+		
+		/*menu inicial*/
+		get(new Route("/") {
+	         @Override
+	        
+	         public Object handle(Request request, Response response) { 
+				Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/inmoapp_development", "root", "root");
+	            String title = "<h1> Inmobiliaria </h1>";
 
-		get(new Route("/hello") {// muestra el menu
-         @Override
-        
-         public Object handle(Request request, Response response) { 
-			Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/inmoapp_development", "root", "root");
-            String title = "<h1> Inmobiliaria </h1>";
+	            String color = "<body BGCOLOR=#CCCC99>";
+	            
+				String menu = "<ul> <li> <a href=\"/buildings\"> Inmuebles </a> </li> </ul>";
 
-			String menu = "<ul> <li> <a href=\"/buildings\"> Inmuebles </a> </li> </ul>";
+	            String footer = "<p> created by: lagax</p>";
+				Base.close();
+	            return title + color + menu + footer;
+	         };
+			 });
+		
+		/*submenu*/
+		get(new Route("/buildings") {// muestra el menu
+	         @Override
+	        
+	         public Object handle(Request request, Response response) { 
+				Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/inmoapp_development", "root", "root");
+	            String title = "<h1> Inmuebles </h1>";
 
-            String footer = "<p> created by: lagax</p>";
-			Base.close();
-            return title + menu + footer;
-         };
-		 });
+	            String color = "<body BGCOLOR=#CCCC99>";
+	            
+				String menu = "<ul> <li> <a href=\"/filter\"> BuscarInmuebles </a> </li> </ul>";
+				
+				String menu2 = "<ul> <li> <a href=\"/obtainingdata\"> AgregarInmuebles </a> </li> </ul>";
+				
+				String menu3 = "<ul> <li> <a href=\"/deleting\"> BorrarInmuebles </a> </li> </ul>";
 
-		get(new Route("/buildings") { //motor de busqueda
+	            String footer = "<p> created by: lagax</p>";
+				Base.close();
+	            return title + color + menu + menu2 + menu3 +footer;
+	         };
+			 });
+		
+		/*menu para obtener datos del inmueble a crear*/
+		get(new Route("/obtainingdata") {
+			public Object handle(Request request, Response response) {
+				Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/inmoapp_development", "root", "root");
+				Base.openTransaction();
+				StringWriter writer = new StringWriter();
+				final Configuration configuracion = new Configuration();	
+				configuracion.setClassForTemplateLoading(Inmo.class, "/");
+				Template plantillaInmoApp = null;
+				try {
+					plantillaInmoApp = configuracion.getTemplate("inmobiliaria1.html");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				Map<String, Object> buildingMap = new HashMap<String, Object>();
+				try {
+					plantillaInmoApp.process(buildingMap, writer);
+				} catch (TemplateException e) {
+					
+					e.printStackTrace();
+				} catch (IOException e) {
+		
+					e.printStackTrace();
+				}
+				Base.commitTransaction();
+				Base.close();
+				 return writer;
+		     };
+			 });
+		
+		/*menu para selecionar el tipo de filtro de inmuebles a buscar*/ 
+		get(new Route("/filter") {
+			public Object handle(Request request, Response response) {
+				Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/inmoapp_development", "root", "root");
+				Base.openTransaction();
+				StringWriter writer = new StringWriter();
+				final Configuration configuracion = new Configuration();	
+				configuracion.setClassForTemplateLoading(Inmo.class, "/");
+				Template plantillaInmoApp = null;
+				try {
+					plantillaInmoApp = configuracion.getTemplate("busqueda.html");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				Map<String, Object> buildingMap = new HashMap<String, Object>();
+				try {
+					plantillaInmoApp.process(buildingMap, writer);
+				} catch (TemplateException e) {
+					
+					e.printStackTrace();
+				} catch (IOException e) {
+		
+					e.printStackTrace();
+				}
+				Base.commitTransaction();
+				Base.close();
+				 return writer;
+		     };
+			 });
+	
+		/*menu para elegir el inmueble a borrar*/
+		get(new Route("/deleting") {
+			public Object handle(Request request, Response response) {
+				Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/inmoapp_development", "root", "root");
+				Base.openTransaction();
+				StringWriter writer = new StringWriter();
+				final Configuration configuracion = new Configuration();	
+				configuracion.setClassForTemplateLoading(Inmo.class, "/");
+				Template plantillaInmoApp = null;
+				try {
+					plantillaInmoApp = configuracion.getTemplate("borrar.html");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				Map<String, Object> buildingMap = new HashMap<String, Object>();
+				try {
+					plantillaInmoApp.process(buildingMap, writer);
+				} catch (TemplateException e) {
+					
+					e.printStackTrace();
+				} catch (IOException e) {
+		
+					e.printStackTrace();
+				}
+				Base.commitTransaction();
+				Base.close();
+				 return writer;
+		     };
+			 });
+		
+		/*creacion de inmuebles*/
+    	post(new Route("/Createbuildings") {
+			@Override
+			public Object handle(Request request, Response response) {
+				Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/inmoapp_development", "root", "root");
+				Set<String> parametros = request.queryParams();
+				Integer type = valor("type",parametros,request);
+				Integer status = valor("status",parametros,request);
+				Integer price = valor("price",parametros,request);
+				Integer postcode = valor("postcode",parametros,request); 
+				Integer dni = valor("dni",parametros,request);
+                String description = request.queryParams("description");
+                String city = request.queryParams("city");
+                String address = request.queryParams("address");
+                String neighborhood = request.queryParams("neighborhood");
+                ABMBuilding.createBuilding(type, description, status, price, address, neighborhood, city, postcode, dni);  
+                Base.close();
+                response.status(201);
+                String color = "<body BGCOLOR=#CCCC99>";
+                return color + "inmueble registrado";
+			}
+		});
+    	
+    	/*eliminacion del inmueble*/
+    	get(new Route("/Deletebuildings"){
+    		@Override
+    		public Object handle(Request request, Response response) {
+    			Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/inmoapp_development", "root", "root");
+    			String a = request.queryParams("address");
+    			ABMBuilding.deleteBuilding(a);
+    			Base.close();
+    			return "Inmueble eliminado";
+    		}
+    	});
+		
+    	/*busqueda de inmuebles*/
+		get(new Route("/Searchbuildings") {
 	         @Override
 	         public Object handle(Request request, Response response) {
 	        	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/inmoapp_development", "root", "root");
@@ -60,7 +225,7 @@ public class Inmo {
 				String city = request.queryParams("city");
 				Integer dni = valor("dni",parametros,request);
 				String realEstate = request.queryParams("realEstate");
-	        	List<Building> inmuebles = Search.buildings(type,status,minPrice,maxPrice,city,dni,realEstate);
+	        	List<Building> inmuebles = Search.buildings(type,status,maxPrice,minPrice,city,dni,realEstate);
 	        	String pantalla="";
 	        	Iterator<Building> iter=inmuebles.iterator();
 	        	while(iter.hasNext()){
@@ -71,32 +236,7 @@ public class Inmo {
 	        	return  pantalla;
 	         }
 	      });
-
-		
-
-
-		
-         
-
-		//ABMOwner.createOwner(32492642,"john","doe","ksadad 222","asnmsal", "riocuarto",5800, "jnskks@ndn.com");
-		//ABMOwner.createOwner(90,"brad","paaras","ssddd 662","asnmsal", "riocuarto",5800, "jnsgte@ndn.com");
-     	//ABMBuilding.createBuilding(2,"vlestre",1,4000,"blasbareba 123","poltrof","riocuarto",5800,90);
-     	//ABMBuilding.createBuilding(2,"vlestre",2,3000,"blasbareba 124","poltrof","irak",5800,90);
-     	//ABMBuilding.createBuilding(2,"vlestre",2,100000,"blasbareba 128","poltrof","irak",5800,90);
-     	//List<Building> lb = new LinkedList<Building>();
-     	//lb = Search.buildings(-1, -1, -1,-1, null , -1, "inmo1");
-     	//System.out.println("tamaño: " + lb.size());
-		/*List<Integer> ownerList = new LinkedList<Integer>();
-		ownerList.add(90);
-		ownerList.add(1313);
-		ABMRealEstate.createRealEstate("inmo1","asss 332","sdaka","Dubai",5800,4635465,"inmo1@gamil,com","www.inmo1.com",ownerList);
-		//ABMRealEstate.modifyEmail("inmo1","inmoooooo@masjs.com");
-		//ABMBuilding.deleteBuilding("blasbareba 12");
-		//ABMOwner.deleteOwner(32492642);
-		//ABMOwner.modifyCity(1313,"cordobaCapital",800000);
-		//ABMRealEstate.modifyCity("inmo1","BUENOSAIRES",2388);	*/
-		
         
-    }	
+	}
 }
 
