@@ -1,0 +1,51 @@
+
+<html>
+	<head>
+		<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type" /><title>busqueda</title>
+	</head>
+	<body>
+		<body BGCOLOR=#CCCC99>
+		<form action = "Searchbuildings" method = "get">
+		<h1 style="text-align: center;">Buscar Inmuebles</h1>
+		<h2 style="text-align: center;">Filtrar por:</h2>
+		<div style="text-align: center;">Tipo inmueble 
+			<select name="type">
+				<option></option>
+				<option value="1">campo</option>
+				<option value="2">quinta</option>
+				<option value="3">casa</option>
+				<option value="4">garage</option>
+				<option value="5">oficina</option>
+				<option value="6">departamento</option>
+			</select>
+		<br />
+		</div>
+		<br />
+		<div style="text-align: center;">Precio minimo <input name="minPrice" /><br />
+		</div>
+		<br />
+		<div style="text-align: center;">Precio maximo <input name="maxPrice" /><br />
+		</div>
+		<br />
+		<div style="text-align: center;">Categoria 
+			<select name="status">
+				<option></option>
+				<option value="1">En venta</option>
+				<option value="2">En alquiler</option>
+			</select>
+		<br />
+		</div>
+		<br />
+		<div style="text-align: center;">Ciudad <input name="city" /><br />
+		</div>
+		<br />
+		<div style="text-align: center;">Dni Propietario <input name="dni" /><br />
+		</div>
+		<br />
+		<div style="text-align: center;">Inmobiliaria <input name="realEstate" /><br />
+ 
+		<input type = "submit", value = "Buscar"/>
+
+		</form>
+	</body>
+</html>
